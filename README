@@ -1,2 +1,4 @@
 Simple Time Management System
 in Ruby On Rails / React.js + Redux + Saga + Recompose
+
+npm install && npm start
