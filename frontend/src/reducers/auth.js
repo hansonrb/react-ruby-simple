@@ -1,6 +1,6 @@
 
-import * as C from '~/actions/constants';
-import { success, failure } from '~/helpers/async';
+import * as C from '../actions/constants';
+import { success, failure } from '../helpers/async';
 
 const initialAuthState = {
 };

@@ -1,9 +1,9 @@
 
-import { STATUS, ERROR, RELOAD } from '~/actions/constants';
+import { STATUS, ERROR, RELOAD } from '../actions/constants';
 
 const initialState = {
   errors: {},
-  statuses: {}
+  statuses: {},
 };
 
 export default (state = initialState, action) => {

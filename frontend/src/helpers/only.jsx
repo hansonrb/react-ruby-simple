@@ -8,12 +8,12 @@ class Only extends React.Component {
     children: PropTypes.any.isRequired,
     role: PropTypes.string.isRequired,
     currentRoles: PropTypes.array,
-    isLoggedIn: PropTypes.bool
+    isLoggedIn: PropTypes.bool,
   };
 
   static defaultProps = {
     currentRoles: [],
-    isLoggedIn: false
+    isLoggedIn: false,
   };
 
   render () {
@@ -22,15 +22,14 @@ class Only extends React.Component {
       currentRoles &&
       findIndex(currentRoles, { name: role }) > -1) {
       return children;
-    }
-    else {
+    } else {
       return null;
     }
   }
 }
 
 export default connect(({
-  auth: { isLoggedIn, roles }
+  auth: { isLoggedIn, roles },
 }) => ({
-  isLoggedIn, currentRoles: roles
+  isLoggedIn, currentRoles: roles,
 }))(Only);

@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 import { takeLatest, takeEvery } from 'redux-saga/effects';
 import { find } from 'lodash';
 import * as cx from '../actions/constants';
@@ -45,7 +45,7 @@ const doSignup = async.apiCall({
   success: res => ({ auth: res.data })
 });
 
-export default function* rootSaga () {
+export default function* rootSaga() {
   yield takeLatest(cx.DO_LOGIN, doLogin);
   yield takeLatest(cx.DO_LOGOUT, doLogout);
   yield takeLatest(cx.DO_SIGNUP, doSignup);

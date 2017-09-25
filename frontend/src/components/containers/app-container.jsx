@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class AppContainer extends React.Component {
-  static propTypes = {
-    children: PropTypes.element.isRequired
-  };
-
-  render () {
+export default class AppContainer extends React.PureComponent {
+  render() {
     return (
-      <div id='timemgnt'>
+      <div id="timemgnt">
         {this.props.children}
       </div>
     );
   }
 }
+
+AppContainer.propTypes = {
+  children: PropTypes.element.isRequired,
+};

@@ -1,10 +1,11 @@
+import { all } from 'redux-saga/effects';
 
-import { default as auth } from './auth';
-import { default as users } from './users';
+import auth from './auth';
+import users from './users';
 
-export default function* rootSaga () {
-  yield [
+export default function* rootSaga() {
+  yield all([
     auth(),
-    users()
-  ];
+    users(),
+  ]);
 }

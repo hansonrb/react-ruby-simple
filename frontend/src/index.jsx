@@ -1,4 +1,5 @@
-/* eslint-disable react/jsx-filename-extension, no-undef */
+/* eslint-disable no-undef */
+import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';

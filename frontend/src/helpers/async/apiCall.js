@@ -1,7 +1,8 @@
-
-import * as async from '~/helpers/async';
+/* eslint-disable func-names */
 import { get } from 'lodash';
 import { call, put } from 'redux-saga/effects';
+
+import * as async from '../async';
 
 export default ({
   type,
@@ -10,7 +11,7 @@ export default ({
   onSuccess,
   onFailure,
   success,
-  failure
+  failure,
 }) => function* (action) {
   try {
     yield async.reportPending(type);
@@ -18,7 +19,7 @@ export default ({
     const res = yield call(
       method,
       typeof path === 'function' ? path(action) : path,
-      action.payload
+      action.payload,
     );
 
     if (onSuccess) {
@@ -27,7 +28,7 @@ export default ({
 
     yield put({
       type: async.success(type),
-      payload: success ? success(res, action) : res
+      payload: success ? success(res, action) : res,
     });
 
     yield async.reportSuccess(type);
@@ -41,7 +42,7 @@ export default ({
 
     yield put({
       type: async.failure(type),
-      payload: errPayload
+      payload: errPayload,
     });
 
     yield async.reportError(type, errPayload);

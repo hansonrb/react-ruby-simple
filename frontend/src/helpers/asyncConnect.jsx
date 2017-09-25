@@ -3,20 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { getContext } from 'recompose';
 
-export default depsMapper => Component => {
+export default depsMapper => (Component) => {
   @getContext({
-    store: PropTypes.object
+    store: PropTypes.object,
   })
   class AsyncConnect extends React.PureComponent {
-    componentDidMount () {
-      this.getDeps(this.props);
-    }
-
-    componentWillReceiveProps (next) {
-      this.getDeps(next);
-    }
-
-    getDeps (props) {
+    static getDeps(props) {
       const { async: { statuses } } = props.store.getState();
       const deps = typeof depsMapper === 'function'
         ? depsMapper(props)
@@ -29,9 +21,17 @@ export default depsMapper => Component => {
       });
     }
 
-    render () {
+    componentDidMount() {
+      this.getDeps(this.props);
+    }
+
+    componentWillReceiveProps(next) {
+      this.getDeps(next);
+    }
+
+    render() {
       return (
-        <Component { ...this.props } />
+        <Component {...this.props} />
       );
     }
   }

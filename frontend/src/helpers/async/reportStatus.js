@@ -1,8 +1,8 @@
 
 import { put } from 'redux-saga/effects';
-import { STATUS } from '~/actions/constants';
+import { STATUS } from '../../actions/constants';
 
 export default (type, status) => put({
   type: STATUS,
-  payload: { type, status }
+  payload: { type, status },
 });
