@@ -1,5 +1,5 @@
-import * as cx from './actions/constants';
-import { success, failure } from './helpers/async';
+import * as cx from '../actions/constants';
+import { success, failure } from '../helpers/async';
 
 const initialState = {
   error: null,

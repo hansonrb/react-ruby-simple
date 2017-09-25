@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   async,
   users,
   form: formReducer,
-  routing
+  routing,
 });
 
 export default rootReducer;

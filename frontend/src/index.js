@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension, no-undef */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
@@ -35,10 +36,11 @@ sagaMiddleware.run(sagas);
 const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
-  <Provider store={ store }>
+  <Provider store={store}>
     <Router
-      history={ history }
-      routes={ routes } />
+      history={history}
+      routes={routes}
+    />
   </Provider>,
   document.getElementById('root'),
 );

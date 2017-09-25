@@ -1,8 +1,8 @@
 
 import { takeLatest, takeEvery } from 'redux-saga/effects';
 import { find } from 'lodash';
-import * as cx from './actions/constants';
-import { apiClient, async } from '~/helpers';
+import * as cx from '../actions/constants';
+import { apiClient, async } from '../helpers';
 
 const doLogin = async.apiCall({
   type: cx.DO_LOGIN,
