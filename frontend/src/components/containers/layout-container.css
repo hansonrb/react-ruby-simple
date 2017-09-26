@@ -1,0 +1,10 @@
+#main-layout #content-wrapper {
+    padding: 50px 0;
+}
+#main-layout #footer {
+    padding: 50px;
+
+    background-color: #333;
+    color: white;
+    text-align: center;
+}

@@ -8,7 +8,15 @@ export default depsMapper => (Component) => {
     store: PropTypes.object,
   })
   class AsyncConnect extends React.PureComponent {
-    static getDeps(props) {
+    componentDidMount() {
+      this.getDeps(this.props);
+    }
+
+    componentWillReceiveProps(next) {
+      this.getDeps(next);
+    }
+
+    getDeps(props) { // eslint-disable-line
       const { async: { statuses } } = props.store.getState();
       const deps = typeof depsMapper === 'function'
         ? depsMapper(props)
@@ -19,14 +27,6 @@ export default depsMapper => (Component) => {
           props.store.dispatch(promise(payload));
         }
       });
-    }
-
-    componentDidMount() {
-      this.getDeps(this.props);
-    }
-
-    componentWillReceiveProps(next) {
-      this.getDeps(next);
     }
 
     render() {

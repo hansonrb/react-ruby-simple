@@ -12,5 +12,9 @@ export default class AppContainer extends React.PureComponent {
 }
 
 AppContainer.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.element,
+};
+
+AppContainer.defaultProps = {
+  children: null,
 };

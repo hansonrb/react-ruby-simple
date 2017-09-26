@@ -5,22 +5,22 @@ import { compose, withHandlers } from 'recompose';
 import { Container, Row, Col } from 'reactstrap';
 
 import { constants as cx } from '../../actions';
-import { doLogin } from '../../actions/auth';
+import { createHour } from '../../actions/hours';
 
-import { LoginForm } from '../common/forms';
-import './login.css';
+import { HoursForm } from '../common/forms';
+import './hours.css';
 
 const enhance = compose(
   connect(({
     async: { statuses },
   }) => ({
-    isSubmitting: statuses[cx.DO_LOGIN] === 'pending',
+    isSubmitting: statuses[cx.CREATE_HOUR] === 'pending',
   }), {
-    doLogin,
+    createHour,
   }),
   withHandlers({
     handleSubmit: props => (data) => {
-      props.doLogin(data);
+      props.createHour(data);
     },
   }),
 );
@@ -28,10 +28,11 @@ const enhance = compose(
 export default enhance(({
   handleSubmit,
 }) => (
-  <Container id="login-form">
+  <Container id="hours-form-new">
     <Row>
-      <Col sm={{ size: 8, offset: 2 }} md={{ size: 6, offset: 3 }}>
-        <LoginForm
+      <Col sm={{ size: 10, offset: 1 }} md={{ size: 8, offset: 2 }}>
+        <h2 className="mb-3">New Hours worked</h2>
+        <HoursForm
           onSubmit={handleSubmit}
         />
       </Col>
