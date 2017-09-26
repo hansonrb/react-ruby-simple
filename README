@@ -2,3 +2,11 @@ Simple Time Management System
 in Ruby On Rails / React.js + Redux + Saga + Recompose
 
 npm install && npm start
+
+
+install postgreSQL
+
+createdb timemgmt-development
+createdb timemgmt-test
+createdb timemgmt
+

@@ -1,3 +1,8 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  include DeviseTokenAuth::Concerns::SetUserByToken
+  protect_from_forgery with: :null_session
+
+  def not_authorized
+    render json: {errors: [message: "Not Authorized"]}, status: :unauthorized
+  end
 end
