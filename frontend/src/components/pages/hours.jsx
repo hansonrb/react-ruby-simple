@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { compose, withState, withHandlers, withProps, lifecycle } from 'recompose';
-import * as FontAwesome from 'react-icons/lib/fa';
 import { Row, Col, Table, Button, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
 import moment from 'moment';
 import { filter, uniqueId, map, get } from 'lodash';
@@ -149,7 +148,7 @@ export default enhance(({
             </td>
             <td>
               <Link to={`/hours/edit/${h.id}`} className="action-edit">
-                <FontAwesome.FaPencil /> Edit
+                <i className="fa fa-pencil" /> Edit
               </Link>
               <Link
                 onClick={() => {
@@ -159,7 +158,7 @@ export default enhance(({
                 className="action-edit"
                 tabIndex="-1"
               >
-                <FontAwesome.FaTrash /> Delete
+                <i className="fa fa-trash" /> Delete
               </Link>
             </td>
           </tr>

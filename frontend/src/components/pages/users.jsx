@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { compose, withState, withHandlers, lifecycle, withProps } from 'recompose';
-import * as FontAwesome from 'react-icons/lib/fa';
 import { Table, Button, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
 import { filter, uniqueId, map, get } from 'lodash';
 import { AlertList } from 'react-bs-notifier';
@@ -127,7 +126,7 @@ export default enhance(({
             <td>{u.prefered_working_hours}</td>
             <td>
               <Link to={`/users/edit/${u.id}`} className="action-edit">
-                <FontAwesome.FaPencil /> Edit
+                <i className="fa fa-pencil" /> Edit
               </Link>
               <Link
                 onClick={() => {
@@ -137,7 +136,7 @@ export default enhance(({
                 className="action-edit"
                 tabIndex="-1"
               >
-                <FontAwesome.FaTrash /> Delete
+                <i className="fa fa-trash" /> Delete
               </Link>
             </td>
           </tr>

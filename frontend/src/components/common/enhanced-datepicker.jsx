@@ -4,7 +4,6 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FormFeedback, FormGroup, Label } from 'reactstrap';
-import { FaCalendar } from 'react-icons/lib/fa';
 
 import './enhanced-datepicker.css';
 
@@ -25,7 +24,7 @@ export default function EnhancedInput({
           placeholderText={placeholder}
           className="form-control"
         />
-        <span className="calendar-icon"><FaCalendar /></span>
+        <span className="calendar-icon"><i className="fa fa-calendar" /></span>
       </div>
       {touched && error && <FormFeedback>{error}</FormFeedback>}
     </FormGroup>
