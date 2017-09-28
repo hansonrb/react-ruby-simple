@@ -18,7 +18,7 @@ class Api::HoursController < ApplicationController
         if @hour.save
             render json: @hour
         else
-            render json: @hour.errors, status: :unprocessable_entity
+            render json: { errors: @hour.errors, success: false }, status: :unprocessable_entity
         end
     end
 
@@ -26,7 +26,7 @@ class Api::HoursController < ApplicationController
         if @hour.update(hour_params)
             render json: @hour
         else
-            render json: @hour.errors, status: :unprocessable_entity
+            render json: { errors: @hour.errors, success: false }, status: :unprocessable_entity
         end
     end
 

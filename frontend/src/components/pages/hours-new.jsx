@@ -23,7 +23,8 @@ const enhance = compose(
     handleSubmit: props => data =>
       asyncFormValidator(props.createHour, data).then(() => {
         props.router.push('/hours');
-      }),
+      })
+    ,
   }),
 );
 

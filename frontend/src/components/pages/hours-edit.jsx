@@ -35,11 +35,11 @@ const enhance = compose(
     initialValues: find(props.hours, { id: props.params.id - 0 }),
   })),
   withHandlers({
-    handleSubmit: props => data => (
+    handleSubmit: props => data =>
       asyncFormValidator(props.updateHour, data).then(() => {
         props.router.push('/hours');
       })
-    ),
+    ,
   }),
 );
 
