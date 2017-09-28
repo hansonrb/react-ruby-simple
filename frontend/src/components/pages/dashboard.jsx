@@ -7,8 +7,8 @@ export default () => (
   <div id="page-dashboard">
     <Jumbotron>
       <h1>Welcome to Time Management System</h1>
-      <p>Developed by Hanson Rynsburger with Ruby On Rails,
-        Apipie for front end and React/Redux/Saga for backend</p>
+      <p>Developed by Hanson Rynsburger with Ruby On Rails
+      for back end and React/Redux/Saga for frontend</p>
 
       <p className="lead">
         <Link to="/hours">

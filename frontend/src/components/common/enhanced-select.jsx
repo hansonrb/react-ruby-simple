@@ -7,7 +7,6 @@ import { uniqueId } from 'lodash';
 export default function EnhancedSelect({
   input,
   label,
-  placeholder,
   options,
   optionsWithBlank,
   meta: { touched, error },
@@ -15,7 +14,7 @@ export default function EnhancedSelect({
   return (
     <FormGroup color={touched && error ? 'danger' : ''}>
       <Label>{label}</Label>
-      <Input {...input} placeholder={placeholder} type="Select">
+      <Input type="select" {...input}>
         { optionsWithBlank &&
           <option key="0" value="" />
         }
@@ -32,7 +31,6 @@ export default function EnhancedSelect({
 EnhancedSelect.propTypes = {
   input: PropTypes.object.isRequired, // eslint-disable-line
   label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
   options: PropTypes.array, // eslint-disable-line
   meta: PropTypes.object, // eslint-disable-line
   optionsWithBlank: PropTypes.bool,

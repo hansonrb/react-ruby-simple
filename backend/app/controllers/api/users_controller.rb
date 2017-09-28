@@ -1,5 +1,6 @@
 class Api::UsersController < ApplicationController
-    before_action :authenticate_user!
+    respond_to :json
+    # before_action :authenticate_user!
     before_action :set_user, only: [:update, :destroy, :show]
 
     def index
@@ -34,6 +35,8 @@ class Api::UsersController < ApplicationController
             else
                 render json: @user.errors, status: :unprocessable_entity
             end
+        else
+            return not_authorized
         end
     end
 
@@ -59,10 +62,10 @@ class Api::UsersController < ApplicationController
 
     private
     def set_user
-        @user = User.find(id: params[:id])
+        @user = User.find(params[:id])
     end
 
     def user_params
-        params.permit(:email, :password, :role, :prefered_working_hours)
+        params.permit(:name, :email, :password, :role, :prefered_working_hours)
     end
 end

@@ -3,32 +3,22 @@ import React from 'react';
 import { Link } from 'react-router';
 import { reduxForm, Field } from 'redux-form';
 import { compose } from 'recompose';
-// import { map, uniqueId } from 'lodash';
-import { Form, Button } from 'reactstrap';
+import { Form, Button, Alert } from 'reactstrap';
 
 import { EnhancedInput } from '../../common';
+import { validators } from '../../../helpers';
 
 const enhance = compose(
   reduxForm({
     form: 'loginForm',
-    validate(values) {
-      const errors = {};
-
-      if (!values.email || values.email.length === 0) {
-        errors.email = 'Please input email address';
-      }
-      if (!values.password || values.password.length === 0) {
-        errors.password = 'Please input password';
-      }
-
-      return errors;
-    },
   }),
 );
 
 export default enhance(({
   handleSubmit,
   onSubmit,
+  isSubmitting,
+  errors,
 }) => (
   <Form
     name="login-form"
@@ -36,12 +26,14 @@ export default enhance(({
   >
     <h2>Please sign in</h2>
 
+    { errors.length > 0 && <Alert color="danger">{ errors }</Alert> }
     <Field
       name="email"
       component={EnhancedInput}
       type="email"
       placeholder="Email address"
       label="Email Address"
+      validate={[validators.required]}
     />
     <Field
       name="password"
@@ -49,8 +41,9 @@ export default enhance(({
       type="password"
       placeholder="Password"
       label="Password"
+      validate={[validators.required]}
     />
-    <Button type="submit" color="primary">Sign In</Button>
+    <Button type="submit" color="primary" disabled={isSubmitting}>Sign In</Button>
     <div>Need a new account? <Link to="/signup">Register Now</Link></div>
   </Form>
 ));

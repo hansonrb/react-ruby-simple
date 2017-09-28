@@ -11,3 +11,11 @@ export function doLogout(payload) {
 export function doSignup(payload) {
   return { type: cx.DO_SIGNUP, payload };
 }
+
+export function doUpdatePassword(payload) {
+  return { type: cx.DO_UPDATE_PASSWORD, payload };
+}
+
+export function doUpdateInfo(payload) {
+  return { type: cx.DO_UPDATE_INFO, payload };
+}

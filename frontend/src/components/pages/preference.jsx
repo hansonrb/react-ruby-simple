@@ -1,40 +1,89 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers } from 'recompose';
-import { Container, Row, Col } from 'reactstrap';
+import { compose, withHandlers, withState } from 'recompose';
+import { Row, Col } from 'reactstrap';
+import { AlertList } from 'react-bs-notifier';
+import { filter, uniqueId } from 'lodash';
 
-import { constants as cx } from '../../actions';
-import { doLogin } from '../../actions/auth';
+import { doUpdatePassword } from '../../actions/auth';
+import { updateUser } from '../../actions/users';
 
-import { SignupForm } from '../common/forms';
+import { UserForm, PasswordForm } from '../common/forms';
+import { asyncFormValidator } from '../../helpers';
+
 import './signup.css';
 
 const enhance = compose(
+  withState('alerts', 'setAlerts', []),
   connect(({
-    async: { statuses },
+    auth: { data },
   }) => ({
-    isSubmitting: statuses[cx.DO_LOGIN] === 'pending',
+    userData: data,
   }), {
-    doLogin,
+    updateUser, doUpdatePassword,
   }),
   withHandlers({
-    handleSubmit: props => (data) => {
-      props.doSignUp(data);
+    handleSubmit: props => data => (
+      asyncFormValidator(props.updateUser, data).then(() => {
+        props.setAlerts([
+          ...props.alerts,
+          {
+            id: uniqueId(),
+            type: 'success',
+            headline: 'Success',
+            message: 'User info updated successfully',
+          },
+        ]);
+      })
+    ),
+    handlePasswordSubmit: props => data => (
+      asyncFormValidator(props.doUpdatePassword, data).then(() => {
+        props.setAlerts([
+          ...props.alerts,
+          {
+            id: uniqueId(),
+            type: 'success',
+            headline: 'Success',
+            message: 'Password Updated',
+          },
+        ]);
+      })
+    ),
+    handleAlertDismiss: props => (alert) => {
+      props.setAlerts(
+        filter(props.alerts, p => p.id !== alert.id),
+      );
     },
   }),
 );
 
 export default enhance(({
   handleSubmit,
+  userData,
+  handlePasswordSubmit,
+  alerts,
+  handleAlertDismiss,
 }) => (
-  <Container id="signup-form">
+  <div>
     <Row>
       <Col sm={{ size: 8, offset: 2 }} md={{ size: 6, offset: 3 }}>
-        <SignupForm
+        <h2>Preference</h2>
+        <UserForm
           onSubmit={handleSubmit}
+          initialValues={userData}
+        />
+        <hr />
+        <h5>Update Password</h5>
+        <PasswordForm
+          onSubmit={handlePasswordSubmit}
         />
       </Col>
     </Row>
-  </Container>
+    <AlertList
+      alerts={alerts}
+      timeout={3000}
+      onDismiss={handleAlertDismiss}
+    />
+  </div>
 ));

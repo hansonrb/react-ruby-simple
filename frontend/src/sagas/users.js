@@ -1,43 +1,50 @@
 /* eslint-disable func-names */
 import { takeLatest, takeEvery } from 'redux-saga/effects';
+import { apiClient, async } from '../helpers';
 
 import * as cx from '../actions/constants';
-import { apiClient, async } from '../helpers';
 
 const getUsers = async.apiCall({
   type: cx.GET_USERS,
   method: apiClient.get,
-  path: () => '/user/employees/',
+  path: () => '/api/users/',
   success: res => ({ users: res.data }),
 });
 
-const createUser = async.apiCall({
-  type: cx.CREATE_EMPLOYEE,
-  method: apiClient.post,
-  path: ({ payload }) => `/venue/${payload.data.venue_id}/employees/`,
-  success: res => ({ employee: res.data }),
+const getUser = async.apiCall({
+  type: cx.GET_USER,
+  method: apiClient.get,
+  path: ({ payload }) => `/api/users/${payload.id}`,
+  success: res => ({ user: res.data }),
 });
 
-const updateUser = async.apiCall({
-  type: cx.UPDATE_EMPLOYEE,
+const createUser = async.apiCall({
+  type: cx.CREATE_USER,
+  method: apiClient.post,
+  path: '/api/users/',
+  success: res => ({ user: res.data }),
+});
+
+const updateUser = async.apiCallPromise({
+  type: cx.UPDATE_USER,
   method: apiClient.patch,
   path: ({ payload }) =>
-    `/venue/${payload.data.venue_id}/employees/${payload.data.id}/`,
-  success: res => ({ employee: res.data }),
+    `api/users/${payload.data.id}/`,
 });
 
 const deleteUser = async.apiCall({
-  type: cx.DELETE_EMPLOYEE,
+  type: cx.DELETE_USER,
   method: apiClient.delete,
   path: ({ payload }) =>
-    `/venue/${payload.venue_id}/employees/${payload.employee_id}/`,
-  success: (res, { payload }) => ({
-    id: payload.employee_id,
+    `api/users/${payload.id}/`,
+  success: res => ({
+    id: res.data.user_id,
   }),
 });
 
 export default function* rootSaga() {
   yield takeLatest(cx.GET_USERS, getUsers);
+  yield takeLatest(cx.GET_USER, getUser);
   yield takeEvery(cx.CREATE_USER, createUser);
   yield takeEvery(cx.UPDATE_USER, updateUser);
   yield takeEvery(cx.DELETE_USER, deleteUser);

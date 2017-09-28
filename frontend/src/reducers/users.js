@@ -1,8 +1,7 @@
 import * as cx from '../actions/constants';
-import { success, failure } from '../helpers/async';
+import { success } from '../helpers/async';
 
 const initialState = {
-  error: null,
   users: [],
 };
 
@@ -11,41 +10,30 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case success(cx.GET_USERS):
       return Object.assign({}, state, {
-        error: null,
-        users: action.payload.users.results,
+        users: action.payload.users,
       });
     case success(cx.CREATE_USER):
       newState = state.users.slice();
-      newState.push(action.payload.employee);
+      newState.push(action.payload.user);
       return Object.assign({}, state, {
-        error: null,
         users: newState,
       });
     case success(cx.UPDATE_USER):
-      newState = state.users.slice().map(employee =>
-        (employee.id === action.payload.employee.id
-          ? action.payload.employee
-          : employee),
+      newState = state.users.slice().map(user =>
+        (user.id === action.payload.user.id
+          ? action.payload.user
+          : user),
       );
       return Object.assign({}, state, {
-        error: null,
         users: newState,
       });
     case success(cx.DELETE_USER):
-      newState = state.users.slice().filter(employee =>
-        (employee.id !== action.payload.id),
+      newState = state.users.filter(user =>
+        (user.id !== action.payload.id),
       );
       return Object.assign({}, state, {
-        error: null,
         users: newState,
       });
-    case failure(cx.CREATE_USER):
-    case failure(cx.UPDATE_USER):
-    case failure(cx.DELETE_USER): {
-      return Object.assign({}, state, {
-        error: action.payload,
-      });
-    }
     default:
       return state;
   }

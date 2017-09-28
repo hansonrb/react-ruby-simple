@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { findIndex } from 'lodash';
 
 class Only extends React.Component {
   static propTypes = {
-    children: PropTypes.any.isRequired,
+    children: PropTypes.element.isRequired,
     role: PropTypes.string.isRequired,
-    currentRoles: PropTypes.array,
+    roles: PropTypes.arrayOf(PropTypes.string).isRequired,
     isLoggedIn: PropTypes.bool,
   };
 
@@ -16,20 +15,18 @@ class Only extends React.Component {
     isLoggedIn: false,
   };
 
-  render () {
-    const { isLoggedIn, currentRoles, role, children } = this.props;
-    if (isLoggedIn &&
-      currentRoles &&
-      findIndex(currentRoles, { name: role }) > -1) {
+  render() {
+    const { isLoggedIn, roles, role, children } = this.props;
+    if (isLoggedIn && roles && roles.indexOf(role) > -1) {
       return children;
-    } else {
-      return null;
     }
+    return null;
   }
 }
 
 export default connect(({
-  auth: { isLoggedIn, roles },
+  auth: { data },
 }) => ({
-  isLoggedIn, currentRoles: roles,
+  isLoggedIn: !!data.id,
+  role: data.role,
 }))(Only);

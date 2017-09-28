@@ -10,6 +10,7 @@ import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 
 import 'bootstrap/dist/css/bootstrap.css';
+import './index.css';
 
 import rootReducer from './reducers';
 import routes from './routes';

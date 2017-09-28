@@ -10,7 +10,7 @@ import { EnhancedInput } from '../../common';
 
 const enhance = compose(
   reduxForm({
-    form: 'hoursForm',
+    form: 'hourForm',
     validate(values) {
       const errors = {};
 
@@ -48,7 +48,7 @@ export default enhance(({
       label="Password"
     />
     <Field
-      name="password1"
+      name="password_confirmation"
       component={EnhancedInput}
       type="password"
       label="Confirm Password"

@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Link } from 'react-router';
 import { reduxForm, Field } from 'redux-form';
 import { compose } from 'recompose';
 import { Form, Button } from 'reactstrap';
@@ -10,7 +9,7 @@ import { validators } from '../../../helpers';
 
 const enhance = compose(
   reduxForm({
-    form: 'signupForm',
+    form: 'passwordForm',
     validate(values) {
       const errors = {};
 
@@ -27,26 +26,17 @@ const enhance = compose(
 export default enhance(({
   handleSubmit,
   onSubmit,
-  isSubmitting,
+  submitting,
 }) => (
   <Form
-    name="signup-form"
+    name="password-form"
     onSubmit={handleSubmit(onSubmit)}
   >
-    <h2>Please Register</h2>
-
-    <Field
-      name="email"
-      component={EnhancedInput}
-      type="email"
-      placeholder="Email address"
-      label="Email Address"
-      validate={[validators.required]}
-    />
     <Field
       name="password"
       component={EnhancedInput}
       type="password"
+      placeholder="Password"
       label="Password"
       validate={[validators.required]}
     />
@@ -54,9 +44,10 @@ export default enhance(({
       name="password_confirmation"
       component={EnhancedInput}
       type="password"
+      placeholder="Confirm Password"
       label="Confirm Password"
+      validate={[validators.required]}
     />
-    <Button type="submit" color="primary" disabled={isSubmitting}>Register</Button>
-    <div>Have an account? <Link to="/login">Login</Link></div>
+    <Button type="submit" color="primary" disabled={submitting}>Update</Button>
   </Form>
 ));

@@ -1,52 +1,56 @@
 /* eslint-disable */
 import { takeLatest, takeEvery } from 'redux-saga/effects';
 import { find } from 'lodash';
+import { browserHistory } from 'react-router';
+
 import * as cx from '../actions/constants';
 import { apiClient, async } from '../helpers';
 
 const doLogin = async.apiCall({
   type: cx.DO_LOGIN,
   method: apiClient.post,
-  path: () => '/auth/login/',
-  onSuccess: (res, { payload: { remember_me } }) => {
-    if (remember_me) {
-    } else {
-    }
-  },
-  success: () => ({}),
-  failure: res => ({
-    error: res.data.non_field_errors.join('. '),
-    status: res.status
-  })
+  path: '/api/auth/sign_in',
+  onSuccess: (res) => {
+    localStorage.setItem('auth_data', JSON.stringify({
+        headers: res.headers,
+        data: res.data.data,
+    }));
+    browserHistory.push('/');
+  }
 });
 
 const doLogout = async.apiCall({
   type: cx.DO_LOGOUT,
-  method: apiClient.post,
-  path: () => '/auth/logout/',
+  method: apiClient.delete,
+  path: 'api/auth/sign_out/',
   onSuccess: () => {
-
+    localStorage.removeItem('auth_data');
+    browserHistory.push('/login');
   },
-  success: () => ({}),
   onFailure: () => {
-
+    localStorage.removeItem('auth_data');
+    browserHistory.push('/login');
   },
-  failure: () => ({})
 });
 
-const doSignup = async.apiCall({
+const doSignup = async.apiCallPromise({
   type: cx.DO_SIGNUP,
   method: apiClient.post,
-  path: ({ payload }) => {
+  path: 'api/auth/',
+  onSuccess: () => {
+    browserHistory.push('/');
+  }
+});
 
-  },
-  onSuccess: (res) => {
-  },
-  success: res => ({ auth: res.data })
+const doUpdatePassword = async.apiCallPromise({
+  type: cx.DO_UPDATE_PASSWORD,
+  method: apiClient.put,
+  path: 'api/auth/password',
 });
 
 export default function* rootSaga() {
   yield takeLatest(cx.DO_LOGIN, doLogin);
   yield takeLatest(cx.DO_LOGOUT, doLogout);
   yield takeLatest(cx.DO_SIGNUP, doSignup);
+  yield takeLatest(cx.DO_UPDATE_PASSWORD, doUpdatePassword);
 }

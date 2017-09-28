@@ -2,6 +2,7 @@
 import { get } from 'lodash';
 import { call, put } from 'redux-saga/effects';
 
+import { apiClient } from '../../helpers';
 import * as async from '../async';
 
 export default ({
@@ -13,6 +14,19 @@ export default ({
   success,
   failure,
 }) => function* (action) {
+  const auth = localStorage.getItem('auth_data'); // eslint-disable-line
+  if (auth) {
+    const headers = JSON.parse(auth).headers;
+    Object.assign(apiClient.defaults, {
+      headers: {
+        'access-token': headers['access-token'],
+        client: headers.client,
+        expiry: headers.expiry,
+        uid: headers.uid,
+      },
+    });
+  }
+
   try {
     yield async.reportPending(type);
 

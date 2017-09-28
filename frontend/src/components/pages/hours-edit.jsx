@@ -7,7 +7,7 @@ import { Container, Row, Col } from 'reactstrap';
 import { constants as cx } from '../../actions';
 import { updateHour } from '../../actions/hours';
 
-import { HoursForm } from '../common/forms';
+import { HourForm } from '../common/forms';
 import './hours.css';
 
 const enhance = compose(
@@ -32,7 +32,7 @@ export default enhance(({
     <Row>
       <Col sm={{ size: 8, offset: 2 }} md={{ size: 6, offset: 3 }}>
         <h2 className="mb-3">Edit Hours worked</h2>
-        <HoursForm
+        <HourForm
           onSubmit={handleSubmit}
           initialValues={{}}
         />
