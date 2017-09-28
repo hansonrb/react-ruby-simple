@@ -1,13 +1,12 @@
 class Api::UsersController < ApplicationController
     respond_to :json
-    # before_action :authenticate_user!
     before_action :set_user, only: [:update, :destroy, :show]
 
     def index
         if current_user.is_admin?
-            render json: User.all
+            paginate_json User.all
         elsif current_user.is_manager?
-            render json: User.regular_users
+            paginate_json User.regular_users
         else
             render json: [current_user]
         end
@@ -29,7 +28,7 @@ class Api::UsersController < ApplicationController
     def update
         if current_user.is_admin? ||
             (current_user.is_manager? && @user.is_regular?) ||
-            (current_user.is_regular? && @user.id = current_user.id)
+            current_user.id == @user.id
             if @user.update(user_params)
                 render json: @user
             else

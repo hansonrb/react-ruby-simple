@@ -6,8 +6,9 @@ import { Container, Row, Col } from 'reactstrap';
 
 import { constants as cx } from '../../actions';
 import { createHour } from '../../actions/hours';
-
 import { HourForm } from '../common/forms';
+import { asyncFormValidator } from '../../helpers';
+
 import './hours.css';
 
 const enhance = compose(
@@ -19,9 +20,10 @@ const enhance = compose(
     createHour,
   }),
   withHandlers({
-    handleSubmit: props => (data) => {
-      props.createHour(data);
-    },
+    handleSubmit: props => data =>
+      asyncFormValidator(props.createHour, data).then(() => {
+        props.router.push('/hours');
+      }),
   }),
 );
 

@@ -6,5 +6,9 @@ class User < ActiveRecord::Base
 
   enum role: [:regular, :manager, :admin], _prefix: :is
 
+  scope :regular_users,  -> { where(role: :regular) }
+  scope :manager_users,  -> { where(role: :manager) }
+  scope :admin_users,    -> { where(role: :admin) }
+
   has_many :hours
 end

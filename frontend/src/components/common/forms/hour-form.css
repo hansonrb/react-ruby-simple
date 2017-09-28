@@ -1,0 +1,24 @@
+.notes-wrapper {
+    padding: 15px;
+    background-color: #f0f9fa;
+}
+
+.notes-wrapper .note-wrapper {
+    position: relative;
+}
+
+.note-wrapper .delete-note {
+    position: absolute;
+    line-height: 38px;
+    width: 40px;
+    top: 0; right: 0;
+    text-align: center;
+    display: block;
+
+    color: rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+.note-wrapper .delete-note:hover {
+    color: rgba(0,0,0,1);
+}

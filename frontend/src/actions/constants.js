@@ -21,5 +21,5 @@ export const DELETE_USER = 'timemgnt/users/delete_user';
 export const GET_HOURS = 'timemgnt/users/get_hours';
 export const GET_HOUR = 'timemgnt/users/get_hour';
 export const CREATE_HOUR = 'timemgnt/users/create_hour';
-export const UPDATE_HOUR = 'timemgnt/users/delete_hour';
-export const DELETE_HOUR = 'timemgnt/users/update_hour';
+export const UPDATE_HOUR = 'timemgnt/users/update_hour';
+export const DELETE_HOUR = 'timemgnt/users/delete_hour';

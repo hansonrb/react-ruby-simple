@@ -1,12 +1,15 @@
 
 import React from 'react';
-// import { Link } from 'react-router';
-import { reduxForm, Field } from 'redux-form';
+import { Link } from 'react-router';
+import { reduxForm, Field, FieldArray } from 'redux-form';
 import { compose } from 'recompose';
-// import { map, uniqueId } from 'lodash';
 import { Form, Button } from 'reactstrap';
+import { uniqueId } from 'lodash';
 
-import { EnhancedInput } from '../../common';
+import { EnhancedInput, EnhancedDatePicker } from '../../common';
+import { validators } from '../../../helpers';
+
+import './hour-form.css';
 
 const enhance = compose(
   reduxForm({
@@ -14,11 +17,17 @@ const enhance = compose(
     validate(values) {
       const errors = {};
 
-      if (!values.email || values.email.length === 0) {
-        errors.email = 'Please input email address';
+      if (!values.hours_worked || values.hours_worked.length === 0) {
+        errors.hours_worked = 'Required';
       }
-      if (!values.password || values.password.length === 0) {
-        errors.password = 'Please input password';
+      if (isNaN(values.hours_worked)) {
+        errors.hours_worked = 'Should be a Number';
+      }
+      if (values.hours_worked > 24) {
+        errors.hours_worked = 'Should be less than 24';
+      }
+      if (values.hours_worked < 0) {
+        errors.hours_worked = 'Should be at least 0';
       }
 
       return errors;
@@ -26,33 +35,56 @@ const enhance = compose(
   }),
 );
 
+const renderNotes = ({ fields }) => ( // eslint-disable-line
+  <div className="notes-wrapper mb-3" id="notes-wrapper">
+    { fields.map((note, idx) => (
+      <div className="note-wrapper" key={uniqueId()}>
+        <Field
+          name={`${note}`}
+          component={EnhancedInput}
+          validate={[validators.required]}
+        />
+        <Link
+          className="delete-note"
+          onClick={() => fields.remove(idx)}
+        >&times;</Link>
+      </div>
+    )) }
+    <div>
+      <Button
+        type="button"
+        color="info"
+        onClick={() => fields.push('')}
+      >Add Note</Button>
+    </div>
+  </div>
+);
+
 export default enhance(({
   handleSubmit,
   onSubmit,
 }) => (
   <Form
-    name="hours-form"
+    name="hour-form"
     onSubmit={handleSubmit(onSubmit)}
   >
     <Field
-      name="email"
-      component={EnhancedInput}
-      type="email"
-      placeholder="Email address"
-      label="Email Address"
+      name="record_date"
+      component={EnhancedDatePicker}
+      type="input"
+      label="Record Date"
+      validate={[validators.required]}
     />
     <Field
-      name="password"
+      name="hours_worked"
       component={EnhancedInput}
-      type="password"
-      label="Password"
+      type="number"
+      label="Hours Worked"
     />
-    <Field
-      name="password_confirmation"
-      component={EnhancedInput}
-      type="password"
-      label="Confirm Password"
-    />
-    <Button type="submit" color="primary">Create</Button>
+
+    <label htmlFor="notes-wrapper">Notes</label>
+    <FieldArray name="notes" component={renderNotes} />
+
+    <Button type="submit" color="primary">Save</Button>
   </Form>
 ));

@@ -4,41 +4,48 @@ import { takeLatest, takeEvery } from 'redux-saga/effects';
 import * as cx from '../actions/constants';
 import { apiClient, async } from '../helpers';
 
-const getUsers = async.apiCall({
-  type: cx.GET_USERS,
+const getHours = async.apiCall({
+  type: cx.GET_HOURS,
   method: apiClient.get,
-  path: () => '/user/employees/',
-  success: res => ({ users: res.data }),
+  path: ({ payload }) => `/api/hours/?page=${payload.page}`,
+  success: res => res.data,
 });
 
-const createUser = async.apiCall({
-  type: cx.CREATE_EMPLOYEE,
+const getHour = async.apiCall({
+  type: cx.GET_HOUR,
+  method: apiClient.get,
+  path: ({ payload }) => `/api/hours/${payload.id}`,
+  success: res => ({ hour: res.data }),
+});
+
+const createHour = async.apiCallPromise({
+  type: cx.CREATE_HOUR,
   method: apiClient.post,
-  path: ({ payload }) => `/venue/${payload.data.venue_id}/employees/`,
-  success: res => ({ employee: res.data }),
+  path: () => '/api/hours',
+  success: res => ({ hour: res.data }),
 });
 
-const updateUser = async.apiCall({
-  type: cx.UPDATE_EMPLOYEE,
+const updateHour = async.apiCallPromise({
+  type: cx.UPDATE_HOUR,
   method: apiClient.patch,
-  path: ({ payload }) =>
-    `/venue/${payload.data.venue_id}/employees/${payload.data.id}/`,
-  success: res => ({ employee: res.data }),
+  path: ({ payload }) => `/api/hours/${payload.data.id}/`,
+  success: res => ({ hour: res.data }),
 });
 
-const deleteUser = async.apiCall({
-  type: cx.DELETE_EMPLOYEE,
+const deleteHour = async.apiCall({
+  type: cx.DELETE_HOUR,
   method: apiClient.delete,
   path: ({ payload }) =>
-    `/venue/${payload.venue_id}/employees/${payload.employee_id}/`,
-  success: (res, { payload }) => ({
-    id: payload.employee_id,
+    `/api/hours/${payload.id}/`,
+  success: res => ({
+    id: res.data.hour_id,
   }),
 });
 
 export default function* rootSaga() {
-  yield takeLatest(cx.GET_USERS, getUsers);
-  yield takeEvery(cx.CREATE_USER, createUser);
-  yield takeEvery(cx.UPDATE_USER, updateUser);
-  yield takeEvery(cx.DELETE_USER, deleteUser);
+  yield takeLatest(cx.GET_HOURS, getHours);
+  yield takeLatest(cx.GET_HOUR, getHour);
+  yield takeEvery(cx.CREATE_HOUR, createHour);
+  yield takeEvery(cx.UPDATE_HOUR, updateHour);
+  yield takeEvery(cx.DELETE_HOUR, deleteHour);
 }

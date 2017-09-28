@@ -4,6 +4,10 @@ export function getHours(payload) {
   return { type: cx.GET_HOURS, payload };
 }
 
+export function getHour(payload) {
+  return { type: cx.GET_HOUR, payload };
+}
+
 export function createHour(payload) {
   return { type: cx.CREATE_HOUR, payload };
 }

@@ -1,4 +1,5 @@
 class Hour < ApplicationRecord
     belongs_to :user
-    has_many :notes
+
+    serialize :notes, Array
 end

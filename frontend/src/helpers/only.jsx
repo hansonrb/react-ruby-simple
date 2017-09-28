@@ -5,10 +5,14 @@ import { connect } from 'react-redux';
 class Only extends React.Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
-    role: PropTypes.string.isRequired,
+    role: PropTypes.string,
     roles: PropTypes.arrayOf(PropTypes.string).isRequired,
     isLoggedIn: PropTypes.bool,
   };
+
+  static defaultProps = {
+    role: null,
+  }
 
   static defaultProps = {
     currentRoles: [],
@@ -17,7 +21,7 @@ class Only extends React.Component {
 
   render() {
     const { isLoggedIn, roles, role, children } = this.props;
-    if (isLoggedIn && roles && roles.indexOf(role) > -1) {
+    if (isLoggedIn && role && roles && roles.indexOf(role) > -1) {
       return children;
     }
     return null;

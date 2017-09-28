@@ -51,6 +51,7 @@
     "react-addons-css-transition-group": "^15.6.0",
     "react-addons-transition-group": "^15.6.0",
     "react-bs-notifier": "^4.3.2",
+    "react-datepicker": "^0.55.0",
     "react-dev-utils": "^4.0.1",
     "react-dom": "^15.6.1",
     "react-helmet": "^5.2.0",

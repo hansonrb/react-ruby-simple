@@ -12,7 +12,7 @@ import { getUser, updateUser } from '../../actions/users';
 import { UserForm } from '../common/forms';
 import { asyncFormValidator, asyncConnect } from '../../helpers';
 
-import './signup.css';
+import './users.css';
 
 const enhance = compose(
   asyncConnect((props) => {
@@ -20,13 +20,13 @@ const enhance = compose(
     promises.push({
       key: cx.GET_USER,
       promise: getUser,
-      payload: { type: cx.GET_USER, id: props.params.id },
+      payload: { type: cx.GET_USER, id: props.params.id - 0 },
     });
     return promises;
   }),
   connect(({
     async: { statuses },
-    users,
+    users: { users },
   }) => ({
     users,
     getStatus: statuses[cx.GET_USER],
@@ -34,7 +34,7 @@ const enhance = compose(
     updateUser,
   }),
   withProps(props => ({
-    initialValues: find(props.users, { id: props.params.id }),
+    initialValues: find(props.users, { id: props.params.id - 0 }),
   })),
   withHandlers({
     handleSubmit: props => data => (
@@ -50,9 +50,10 @@ export default enhance(({
   getStatus,
   initialValues,
 }) => (
-  <Container id="signup-form">
+  <Container id="page-user-edit">
     <Row>
       <Col sm={{ size: 8, offset: 2 }} md={{ size: 6, offset: 3 }}>
+        <h2>Edit User</h2>
         { getStatus === 'success' &&
           <UserForm
             onSubmit={handleSubmit}

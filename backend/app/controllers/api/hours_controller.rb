@@ -1,10 +1,9 @@
 class Api::HoursController < ApplicationController
     respond_to :json
-    before_action :authenticate_user!
-    before_action :set_hour, only: [:show, :update, :delete]
+    before_action :set_hour, only: [:show, :update, :destroy]
 
     def index
-        render json: current_user.hours
+        paginate_json current_user.hours.order('record_date desc')
     end
 
     def show
@@ -42,10 +41,10 @@ class Api::HoursController < ApplicationController
 
     private
     def set_hour
-        @hour = Hour.find(id: params[:id])
+        @hour = Hour.find(params[:id])
     end
 
     def hour_params
-        params.permit(:record_date, :hours_worked)
+        params.permit(:record_date, :hours_worked, notes: [])
     end
 end

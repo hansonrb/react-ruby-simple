@@ -2,29 +2,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { compose, withState, withHandlers, lifecycle } from 'recompose';
+import { compose, withState, withHandlers, lifecycle, withProps } from 'recompose';
 import * as FontAwesome from 'react-icons/lib/fa';
 import { Table, Button, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
 import { filter, uniqueId, map, get } from 'lodash';
 import { AlertList } from 'react-bs-notifier';
 
+import { Paginator } from '../common';
 import { constants as cx } from '../../actions';
 import { getUsers, deleteUser } from '../../actions/users';
-
-import { asyncConnect } from '../../helpers';
 
 import './users.css';
 
 const enhance = compose(
-  asyncConnect(() => {
-    const promises = [];
-    promises.push({
-      key: cx.GET_USERS,
-      promise: getUsers,
-      payload: { type: cx.GET_USERS },
-    });
-    return promises;
-  }),
   withState('isConfirmOpen', 'setConfirmOpen', false),
   withState('userId', 'setUserId', null),
   withState('alerts', 'setAlerts', []),
@@ -34,12 +24,18 @@ const enhance = compose(
   }) => ({
     async,
     users: users.users,
+    page: users.paginate,
     getStatus: async.statuses[cx.GET_USERS],
     deleteStatus: async.statuses[cx.DELETE_USER],
   }), {
     getUsers,
     deleteUser,
   }),
+  withProps(props => ({
+    currentPage: get(props.page, 'current', 0) - 0,
+    totalPage: get(props.page, 'total_page', 0) - 0,
+    totalCount: get(props.page, 'total', 0) - 0,
+  })),
   withHandlers({
     handleDelete: props => (uid) => {
       props.deleteUser({ id: uid });
@@ -51,7 +47,13 @@ const enhance = compose(
     },
   }),
   lifecycle({
+    componentDidMount() {
+      this.props.getUsers({ page: this.props.location.query.page || 1 });
+    },
     componentWillReceiveProps(nextProps) {
+      if (this.props.location !== nextProps.location) {
+        this.props.getUsers({ page: nextProps.location.query.page || 1 });
+      }
       if (this.props.deleteStatus !== nextProps.deleteStatus) {
         if (nextProps.deleteStatus === 'failure') {
           this.props.setAlerts([
@@ -76,6 +78,8 @@ const enhance = compose(
               message: 'User successfully deleted',
             },
           ]);
+
+          this.props.getUsers({ page: nextProps.location.query.page || 1 });
         }
       }
     },
@@ -90,6 +94,8 @@ export default enhance(({
   handleDelete,
   isConfirmOpen, setConfirmOpen,
   userId, setUserId,
+  currentPage,
+  totalPage,
 }) => (
   <div id="page-users">
     <h2>Users</h2>
@@ -114,7 +120,7 @@ export default enhance(({
         }
         { getStatus === 'success' && users.length > 0 && users.map((u, k) => (
           <tr key={u.id}>
-            <th scope="row">{k + 1}</th>
+            <th scope="row">{k + ((currentPage - 1) * 50) + 1}</th>
             <td>{u.name}</td>
             <td>{u.email}</td>
             <td>{u.role}</td>
@@ -128,20 +134,28 @@ export default enhance(({
                   setConfirmOpen(true);
                   setUserId(u.id);
                 }}
-                to="/users"
                 className="action-edit"
+                tabIndex="-1"
               >
                 <FontAwesome.FaTrash /> Delete
               </Link>
             </td>
           </tr>
         )) }
+        { getStatus === 'failure' &&
+          <tr><td colSpan="6">Error occured.</td></tr>
+        }
       </tbody>
     </Table>
+    { !!totalPage &&
+      <div className="d-flex justify-content-end">
+        <Paginator total={totalPage} current={currentPage} base="/users/" />
+      </div>
+    }
     <Modal isOpen={isConfirmOpen} toggle={() => setConfirmOpen(!isConfirmOpen)}>
       <ModalHeader toggle={() => setConfirmOpen(!isConfirmOpen)}>Confirm</ModalHeader>
       <ModalBody>
-        Are you sure you want to delete this record?
+        Are you sure you want to delete this user?
       </ModalBody>
       <ModalFooter>
         <Button

@@ -4,6 +4,10 @@ export function getUsers(payload) {
   return { type: cx.GET_USERS, payload };
 }
 
+export function getUser(payload) {
+  return { type: cx.GET_USER, payload };
+}
+
 export function createUser(payload) {
   return { type: cx.CREATE_USER, payload };
 }
