@@ -7,7 +7,12 @@ import * as cx from '../actions/constants';
 const getUsers = async.apiCall({
   type: cx.GET_USERS,
   method: apiClient.get,
-  path: ({ payload }) => `/api/users/?page=${payload.page}`,
+  path: ({ payload }) => {
+    if (payload.filter && payload.filter !== '') {
+      return `/api/users/?page=${payload.page}&filter=${payload.filter}`;
+    }
+    return `/api/users/?page=${payload.page}`;
+  },
   success: res => res.data,
 });
 

@@ -10,8 +10,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case success(cx.GET_HOURS):
       return Object.assign({}, state, {
-        hours: action.payload.data,
-        paginate: action.payload.paginate,
+        hours: action.payload.hours,
+        paginate: action.payload.meta,
       });
     case success(cx.GET_HOUR): {
       return Object.assign({}, state, {

@@ -9,13 +9,10 @@ class ApplicationController < ActionController::Base
   def paginate_json(data)
     paginated = data.page(params[:page] || 1)
 
-    render json: {
-        paginate: {
-            current: params[:page] || 1,
-            total: paginated.total_count,
-            total_page: (paginated.total_count / 50.0).ceil
-        },
-        data: paginated
-    }
+    render json: paginated, meta: {
+      current: params[:page] || 1,
+      total: paginated.total_count,
+      total_page: (paginated.total_count / 50.0).ceil
+    }, adapter: :json
   end
 end

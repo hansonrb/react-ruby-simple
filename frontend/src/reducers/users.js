@@ -10,8 +10,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case success(cx.GET_USERS):
       return Object.assign({}, state, {
-        users: action.payload.data,
-        paginate: action.payload.paginate,
+        users: action.payload.users,
+        paginate: action.payload.meta,
       });
     case success(cx.GET_USER): {
       return Object.assign({}, state, {

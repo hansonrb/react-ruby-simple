@@ -13,7 +13,7 @@ export default function EnhancedSelect({
 }) {
   return (
     <FormGroup color={touched && error ? 'danger' : ''}>
-      <Label>{label}</Label>
+      { label && <Label>{label}</Label> }
       <Input type="select" {...input}>
         { optionsWithBlank &&
           <option key="0" value="" />
@@ -30,7 +30,7 @@ export default function EnhancedSelect({
 
 EnhancedSelect.propTypes = {
   input: PropTypes.object.isRequired, // eslint-disable-line
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   options: PropTypes.array, // eslint-disable-line
   meta: PropTypes.object, // eslint-disable-line
   optionsWithBlank: PropTypes.bool,
@@ -40,4 +40,5 @@ EnhancedSelect.defaultProps = {
   options: [],
   type: '',
   optionsWithBlank: false,
+  label: null,
 };

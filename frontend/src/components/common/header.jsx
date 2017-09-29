@@ -47,7 +47,7 @@ export default enhance(({
           <Link to="/preference" className="nav-link">Preference</Link>
         </NavItem>
         <NavItem>
-          <Link onClick={() => handleLogout()} className="nav-link">Logout(<small>{userInfo.email}</small>)</Link>
+          <Link onClick={() => handleLogout()} className="nav-link">Logout (<small>{userInfo.email}</small>)</Link>
         </NavItem>
       </Nav>
     </Collapse>

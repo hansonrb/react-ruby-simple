@@ -6,4 +6,8 @@ class Hour < ApplicationRecord
     validates :hours_worked, numericality: { greater_than: 0, less_than_or_equal_to: 24 }
 
     serialize :notes, Array
+
+    def user_name
+        user.name
+    end
 end

@@ -3,20 +3,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { compose, withState, withHandlers, lifecycle, withProps } from 'recompose';
-import { Table, Button, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
+import { Row, Col, Table, Button, Modal, ModalHeader, ModalFooter, ModalBody } from 'reactstrap';
 import { filter, uniqueId, map, get } from 'lodash';
 import { AlertList } from 'react-bs-notifier';
 
 import { Paginator } from '../common';
+import { UserFilterForm } from '../common/forms';
 import { constants as cx } from '../../actions';
 import { getUsers, deleteUser } from '../../actions/users';
 
 import './users.css';
 
 const enhance = compose(
-  withState('isConfirmOpen', 'setConfirmOpen', false),
-  withState('userId', 'setUserId', null),
-  withState('alerts', 'setAlerts', []),
   connect(({
     users,
     async,
@@ -30,6 +28,10 @@ const enhance = compose(
     getUsers,
     deleteUser,
   }),
+  withState('isConfirmOpen', 'setConfirmOpen', false),
+  withState('userId', 'setUserId', null),
+  withState('alerts', 'setAlerts', []),
+  withState('filterName', 'setFilterName', ''),
   withProps(props => ({
     currentPage: get(props.page, 'current', 0) - 0,
     totalPage: get(props.page, 'total_page', 0) - 0,
@@ -44,14 +46,27 @@ const enhance = compose(
         filter(props.alerts, p => p.id !== alert.id),
       );
     },
+    handleFilter: props => (data) => {
+      props.setFilterName(data.name);
+      props.getUsers({
+        page: props.location.query.page || 1,
+        filter: data.name,
+      });
+    },
   }),
   lifecycle({
     componentDidMount() {
-      this.props.getUsers({ page: this.props.location.query.page || 1 });
+      this.props.getUsers({
+        page: this.props.location.query.page || 1,
+        filter: this.props.filterName,
+      });
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.location !== nextProps.location) {
-        this.props.getUsers({ page: nextProps.location.query.page || 1 });
+        this.props.getUsers({
+          page: nextProps.location.query.page || 1,
+          filter: nextProps.filterName,
+        });
       }
       if (this.props.deleteStatus !== nextProps.deleteStatus) {
         if (nextProps.deleteStatus === 'failure') {
@@ -78,7 +93,10 @@ const enhance = compose(
             },
           ]);
 
-          this.props.getUsers({ page: nextProps.location.query.page || 1 });
+          this.props.getUsers({
+            page: nextProps.location.query.page || 1,
+            filter: nextProps.filterName,
+          });
         }
       }
     },
@@ -93,11 +111,22 @@ export default enhance(({
   handleDelete,
   isConfirmOpen, setConfirmOpen,
   userId, setUserId,
-  currentPage,
-  totalPage,
+  currentPage, totalPage,
+  handleFilter,
 }) => (
   <div id="page-users">
     <h2>Users</h2>
+
+    <Row className="mb-3">
+      <Col md="9" sm="8">
+        <UserFilterForm onSubmit={handleFilter} />
+      </Col>
+      <Col md="3" sm="4" className="text-right">
+        <Link to="/hours/new">
+          <Button color="primary"><i className="fa fa-plus" /> Add New</Button>
+        </Link>
+      </Col>
+    </Row>
 
     <Table striped hover responsive>
       <thead>
@@ -111,12 +140,6 @@ export default enhance(({
         </tr>
       </thead>
       <tbody>
-        { getStatus === 'pending' &&
-          <tr><td colSpan="6">Loading...</td></tr>
-        }
-        { getStatus === 'success' && users.length === 0 &&
-          <tr><td colSpan="6">No Records Found</td></tr>
-        }
         { getStatus === 'success' && users.length > 0 && users.map((u, k) => (
           <tr key={u.id}>
             <th scope="row">{k + ((currentPage - 1) * 50) + 1}</th>
@@ -141,16 +164,25 @@ export default enhance(({
             </td>
           </tr>
         )) }
-        { getStatus === 'failure' &&
-          <tr><td colSpan="6">Error occured.</td></tr>
-        }
       </tbody>
     </Table>
     { !!totalPage &&
       <div className="d-flex justify-content-end">
-        <Paginator total={totalPage} current={currentPage} base="/users/" />
+        <Paginator total={totalPage} current={currentPage} base="/users/" extraParams="" />
       </div>
     }
+    <div className="text-center">
+      { getStatus === 'pending' &&
+        <i className="fa fa-spin fa-spinner" />
+      }
+      { getStatus === 'success' && users.length === 0 &&
+        'No Records Found'
+      }
+      { getStatus === 'failure' &&
+        'Error occured.'
+      }
+    </div>
+
     <Modal isOpen={isConfirmOpen} toggle={() => setConfirmOpen(!isConfirmOpen)}>
       <ModalHeader toggle={() => setConfirmOpen(!isConfirmOpen)}>Confirm</ModalHeader>
       <ModalBody>

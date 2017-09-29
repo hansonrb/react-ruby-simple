@@ -15,7 +15,7 @@ export default function EnhancedInput({
 }) {
   return (
     <FormGroup color={touched && error ? 'danger' : ''}>
-      <Label>{label}</Label>
+      { label && <Label>{label}</Label> }
       <div className="custom-date-picker">
         <DatePicker
           {...input}
@@ -33,7 +33,7 @@ export default function EnhancedInput({
 
 EnhancedInput.propTypes = {
   input: PropTypes.object.isRequired, // eslint-disable-line
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   placeholder: PropTypes.string,
   meta: PropTypes.object, // eslint-disable-line
 };
@@ -41,4 +41,5 @@ EnhancedInput.propTypes = {
 EnhancedInput.defaultProps = {
   meta: { touched: '', error: '', warning: '' },
   placeholder: '',
+  label: null,
 };

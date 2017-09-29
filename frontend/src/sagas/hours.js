@@ -7,7 +7,8 @@ import { apiClient, async } from '../helpers';
 const getHours = async.apiCall({
   type: cx.GET_HOURS,
   method: apiClient.get,
-  path: ({ payload }) => `/api/hours/?page=${payload.page}`,
+  path: ({ payload }) =>
+    `/api/hours/?page=${payload.page}&from_date=${payload.from_date || ''}&to_date=${payload.to_date || ''}`,
   success: res => res.data,
 });
 

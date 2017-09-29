@@ -4,9 +4,13 @@ class Api::UsersController < ApplicationController
 
     def index
         if current_user.is_admin?
-            paginate_json User.all
+            paginate_json User
+                .where("lower(name) like ? or lower(email) like ?", "%#{params[:filter] || ''}%", "%#{params[:filter] || ''}%")
+                .order(:name)
         elsif current_user.is_manager?
             paginate_json User.regular_users
+                .where("lower(name) like ? or lower(email) like ?", "%#{params[:filter] || ''}%", "%#{params[:filter] || ''}%")
+                .order(:name)
         else
             render json: [current_user]
         end

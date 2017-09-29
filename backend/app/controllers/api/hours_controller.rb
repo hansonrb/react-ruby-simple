@@ -3,7 +3,12 @@ class Api::HoursController < ApplicationController
     before_action :set_hour, only: [:show, :update, :destroy]
 
     def index
-        paginate_json current_user.hours.order('record_date desc')
+        res = Hour.order('record_date desc') if current_user.is_admin?
+        res = current_user.hours.order('record_date desc') unless current_user.is_admin?
+
+        res = res.where("record_date >= ?", params[:from_date]) if params[:from_date].present?
+        res = res.where("record_date <= ?", params[:to_date]) if params[:to_date].present?
+        paginate_json res
     end
 
     def show

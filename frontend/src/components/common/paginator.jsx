@@ -9,21 +9,21 @@ const enhance = compose(
 );
 
 export default enhance(({
-  total, current, base,
+  total, current, base, extraParams,
 }) => (
   <Pagination>
     { current > 1 &&
       <PaginationItem>
-        <Link to={`${base}?page=${current - 1}`} className="page-link">
+        <Link to={`${base}?page=${current - 1}${extraParams}`} className="page-link">
           { '\xAB' }
         </Link>
       </PaginationItem>
     }
     { map(
-      range(Math.max(1, current - 5), Math.min(total, current + 5)),
+      range(Math.max(1, current - 5), Math.min(total, current + 5) + 1),
       idx => (
         <PaginationItem active={idx === current} key={idx}>
-          <Link to={`${base}?page=${idx}`} className="page-link">
+          <Link to={`${base}?page=${idx}${extraParams}`} className="page-link">
             { idx }
           </Link>
         </PaginationItem>
@@ -31,7 +31,7 @@ export default enhance(({
     ) }
     { current < total &&
       <PaginationItem>
-        <Link to={`${base}?page=${current + 1}`} className="page-link">
+        <Link to={`${base}?page=${current + 1}${extraParams}`} className="page-link">
           { '\xBB' }
         </Link>
       </PaginationItem>

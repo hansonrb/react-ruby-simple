@@ -10,8 +10,10 @@ import { AlertList } from 'react-bs-notifier';
 import cn from 'classnames';
 
 import { Paginator } from '../common';
+import { HourFilterForm } from '../common/forms';
 import { constants as cx } from '../../actions';
 import { getHours, deleteHour } from '../../actions/hours';
+import { Only } from '../../helpers';
 
 import './hours.css';
 
@@ -31,6 +33,8 @@ const enhance = compose(
   withState('isConfirmOpen', 'setConfirmOpen', false),
   withState('hourId', 'setHourId', null),
   withState('alerts', 'setAlerts', []),
+  withState('fromDate', 'setFromDate', ''),
+  withState('to_date', 'setToDate', ''),
   withProps(props => ({
     currentPage: get(props.page, 'current', 0) - 0,
     totalPage: get(props.page, 'total_page', 0) - 0,
@@ -45,14 +49,32 @@ const enhance = compose(
         filter(props.alerts, p => p.id !== alert.id),
       );
     },
+    handleFilter: props => (data) => {
+      props.setFromDate(data.from_date);
+      props.setToDate(data.to_date);
+
+      props.getHours({
+        page: props.location.query.page || 1,
+        from_date: data.from_date,
+        to_date: data.to_date,
+      });
+    },
   }),
   lifecycle({
     componentDidMount() {
-      this.props.getHours({ page: this.props.location.query.page || 1 });
+      this.props.getHours({
+        page: this.props.location.query.page || 1,
+        from_date: this.props.fromDate,
+        to_date: this.props.toDate,
+      });
     },
     componentWillReceiveProps(nextProps) {
       if (this.props.location !== nextProps.location) {
-        this.props.getHours({ page: nextProps.location.query.page || 1 });
+        this.props.getHours({
+          page: nextProps.location.query.page || 1,
+          from_date: nextProps.fromDate,
+          to_date: nextProps.toDate,
+        });
       }
       if (this.props.deleteStatus !== nextProps.deleteStatus) {
         if (nextProps.deleteStatus === 'failure') {
@@ -79,7 +101,11 @@ const enhance = compose(
             },
           ]);
 
-          this.props.getHours({ page: nextProps.location.query.page || 1 });
+          this.props.getHours({
+            page: nextProps.location.query.page || 1,
+            from_date: nextProps.fromDate,
+            to_date: nextProps.toDate,
+          });
         }
       }
     },
@@ -92,19 +118,22 @@ export default enhance(({
   alerts,
   handleAlertDismiss,
   handleDelete,
+  handleFilter,
   isConfirmOpen, setConfirmOpen,
   hourId, setHourId,
-  currentPage,
-  totalPage,
+  currentPage, totalPage,
+  fromDate, toDate,
 }) => (
   <div id="page-hours">
     <h2>Hours Worked</h2>
 
     <Row className="mb-3">
-      <Col md="9" sm="8">Filters</Col>
+      <Col md="9" sm="8">
+        <HourFilterForm onSubmit={handleFilter} />
+      </Col>
       <Col md="3" sm="4" className="text-right">
         <Link to="/hours/new">
-          <Button color="primary">Add New</Button>
+          <Button color="primary"><i className="fa fa-plus" /> Add New</Button>
         </Link>
       </Col>
     </Row>
@@ -113,19 +142,14 @@ export default enhance(({
       <thead>
         <tr>
           <th style={{ width: '60px' }}>#</th>
-          <th>Date</th>
-          <th>Hours</th>
+          <Only roles={['admin']}><th>User</th></Only>
+          <th style={{ width: '150px' }}>Date</th>
+          <th style={{ width: '60px' }}>Hours</th>
           <th>Note</th>
           <th style={{ width: '200px' }}>Actions</th>
         </tr>
       </thead>
       <tbody>
-        { getStatus === 'pending' &&
-          <tr><td colSpan="5">Loading...</td></tr>
-        }
-        { getStatus === 'success' && hours.length === 0 &&
-          <tr><td colSpan="5">No Records Found</td></tr>
-        }
         { getStatus === 'success' && hours.length > 0 && hours.map((h, k) => (
           <tr
             key={h.id}
@@ -135,6 +159,7 @@ export default enhance(({
             })}
           >
             <th scope="row">{k + ((currentPage - 1) * 50) + 1}</th>
+            <Only roles={['admin']}><th>{ h.user_name }</th></Only>
             <td>{ moment(h.record_date).format('YYYY-MM-DD') }</td>
             <td><span title={h.prefered_working_hours}>{ h.hours_worked }</span></td>
             <td>
@@ -163,14 +188,27 @@ export default enhance(({
             </td>
           </tr>
         )) }
-        { getStatus === 'failure' &&
-          <tr><td colSpan="5">Error occured.</td></tr>
-        }
       </tbody>
     </Table>
+    <div className="text-center">
+      { getStatus === 'pending' &&
+        <i className="fa fa-spin fa-spinner" />
+      }
+      { getStatus === 'success' && hours.length === 0 &&
+        'No Records Found'
+      }
+      { getStatus === 'failure' &&
+        'Error occured.'
+      }
+    </div>
     <div className="d-flex justify-content-end">
       { !!totalPage &&
-        <Paginator total={totalPage} current={currentPage} base="/hours/" />
+        <Paginator
+          total={totalPage}
+          current={currentPage}
+          base="/hours/"
+          extraParams={`&from_date=${fromDate}&to_date=${toDate}`}
+        />
       }
     </div>
     <Modal isOpen={isConfirmOpen} toggle={() => setConfirmOpen(!isConfirmOpen)}>
