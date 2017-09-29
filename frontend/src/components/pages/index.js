@@ -11,3 +11,4 @@ export { default as EditHour } from './hours-edit';
 
 export { default as Users } from './users';
 export { default as EditUser } from './users-edit';
+export { default as NewUser } from './users-new';

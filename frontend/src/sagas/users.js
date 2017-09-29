@@ -23,7 +23,7 @@ const getUser = async.apiCall({
   success: res => ({ user: res.data }),
 });
 
-const createUser = async.apiCall({
+const createUser = async.apiCallPromise({
   type: cx.CREATE_USER,
   method: apiClient.post,
   path: '/api/users/',

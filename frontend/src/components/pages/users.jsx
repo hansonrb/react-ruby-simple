@@ -122,7 +122,7 @@ export default enhance(({
         <UserFilterForm onSubmit={handleFilter} />
       </Col>
       <Col md="3" sm="4" className="text-right">
-        <Link to="/hours/new">
+        <Link to="/users/new">
           <Button color="primary"><i className="fa fa-plus" /> Add New</Button>
         </Link>
       </Col>

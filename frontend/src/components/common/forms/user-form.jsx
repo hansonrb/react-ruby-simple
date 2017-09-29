@@ -17,6 +17,7 @@ export default enhance(({
   handleSubmit,
   onSubmit,
   submitting,
+  withPassword,
 }) => (
   <Form
     name="user-form"
@@ -38,6 +39,14 @@ export default enhance(({
       label="Email Address"
       validate={[validators.required, validators.email]}
     />
+    { withPassword && <Field
+      name="password"
+      component={EnhancedInput}
+      type="password"
+      placeholder="Password"
+      label="Password"
+      validate={[validators.required]}
+    /> }
     <Field
       name="prefered_working_hours"
       component={EnhancedInput}
@@ -52,7 +61,6 @@ export default enhance(({
         component={EnhancedSelect}
         placeholder="Roles"
         label="Role"
-        validate={[validators.required]}
         options={[{
           label: 'Regular', value: 'regular',
         }, {

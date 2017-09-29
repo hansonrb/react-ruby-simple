@@ -25,7 +25,7 @@ class Api::UsersController < ApplicationController
         if @user.save
             render json: @user
         else
-            render json: @user.errors, status: :unprocessable_entity
+            render json: { errors: @user.errors, success: false }, status: :unprocessable_entity
         end
     end
 
@@ -36,7 +36,7 @@ class Api::UsersController < ApplicationController
             if @user.update(user_params)
                 render json: @user
             else
-                render json: @user.errors, status: :unprocessable_entity
+                render json: { errors: @user.errors, success: false }, status: :unprocessable_entity
             end
         else
             return not_authorized
