@@ -1,4 +1,8 @@
-Write a simple time management system
+## Toptal Test Project
+
+## Description
+
+### Write a simple time management system
 
 User must be able to create an account and log in. (If a mobile application, this means that more users can use the app from the same phone).
 User can add (and edit and delete) a row what he has worked on, what date, for how long.
@@ -26,3 +30,48 @@ Bonus: unit and e2e tests.
 
 NOTE: Please note that this is the project that will be used to evaluate your skills. The project will be evaluated as if you were delivering it to a customer. We expect you to make sure that the app is fully functional and doesn’t have any obvious missing pieces. The deadline for the project is 2 weeks from today.
 
+## Development Stacks
+
+Ruby On Rails
+React/Redux/Saga/Recompose
+
+## Requirements
+
+Postgres for database
+RVM for Ruby On Rails
+NVM for NodeJS and front end
+
+### Database
+
+Install postgres
+
+```
+createdb timemgmt-development
+createdb timemgmt-test
+createdb timemgmt
+```
+
+### backend
+
+```
+rvm install 2.4.1
+rvm use 2.4.1
+
+bundle install
+bundle exec rake db:migrate
+bundle exec rake db:seed
+
+rails s
+```
+
+### FrontEnd
+
+```
+NVM
+nvm install 8.5.0
+nvm use 8.5.0
+
+npm install && npm start
+```
+
+Open any browser and visit http://localhost:3000
