@@ -38,11 +38,7 @@ NOTE: Please note that this is the project that will be used to evaluate your sk
 - With AirBNB ESLint,
 - frontend Boilerplate with create-react-app
 
-## Requirements
-
-Postgres for database
-RVM for Ruby On Rails
-NVM for NodeJS and front end
+## Installation
 
 ### Database
 
