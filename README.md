@@ -32,8 +32,11 @@ NOTE: Please note that this is the project that will be used to evaluate your sk
 
 ## Development Stacks
 
-Ruby On Rails
-React/Redux/Saga/Recompose
+- PostgreSQL for Database
+- Ruby On Rails for API backend
+- React/Redux/Saga/Recompose for Front End
+- With AirBNB ESLint,
+- frontend Boilerplate with create-react-app
 
 ## Requirements
 
