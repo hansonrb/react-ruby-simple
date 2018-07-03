@@ -40,8 +40,8 @@ rails s
 
 ```
 NVM
-nvm install 8.5.0
-nvm use 8.5.0
+nvm install 8.11.2
+nvm use 8.11.2
 
 npm install && npm start
 ```
